@@ -1,0 +1,26 @@
+version: '2.0'
+
+services:
+
+  tm_node1:
+    image: tendermint/tendermint:latest
+    container_name: tm_node1
+    hostname: tm_node1
+    tty: true
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: tm_node1
+    extra_hosts:
+      - "tm_node4:192.168.5.60"
+      - "tm_node3:192.168.5.57"
+      - "tm_node2:192.168.5.58"
+      - "tm_node5:192.168.5.61"
+      - "tm_node6:192.168.5.62"
+      - "tm_node7:192.168.5.63"
+      - "tm_node8:192.168.5.66"
+    ports:
+      - 26667:26657
+      - 26656:26656
+     volumes:
+      - ./node1_data:/tendermint
+    entrypoint: ["sh", "-c", "tendermint node --p2p.persistent_peers=857d0e11e916436e7c74e2bdd863195c4e1c135b@192.168.5.58:26656,ee4841fc73b0038fcd3c8c8346630757d6bc868f@192.168.5.57:26656,e0c4a27bba185d915564137250cad8111968d2ac@192.168.5.60:26656,14bdb70f2338244c4d3326bf0e44d04e0686f6b6@192.168.5.61:26656,8d11f90100babec7819ee7a22d9b6e9063af98cf@192.168.5.62:26656,4f21d70f5c020fdfdb30a329916436863313932e@192.168.5.63:26656,18de7bcf7295baddc684de13840970850f77b3e9@192.168.5.66:26656 --moniker=`hostname` --proxy_app=persistent_kvstore --consensus.create_empty_blocks=false"]
